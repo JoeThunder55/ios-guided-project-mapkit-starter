@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import MapKit
 
 struct QuakeResults: Decodable {
     let features: [Quake]
     
 }
 
-class Quake: Codable {
+class Quake: Codable, NSObject {
     let magnitude: Double
     let place: String
     let time: Date
@@ -40,5 +41,21 @@ class Quake: Codable {
         var coordinates = try geometry.nestedUnkeyedContainer(forKey: .coordinates)
         self.longitude = try coordinates.decode(Double.self)
         self.latitude = try coordinates.decode(Double.self)
+    }
+}
+
+
+extension Quake: MKAnnotation {
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D {
+            CLLocationCoordinate2D(latitude: <#T##CLLocationDegrees#>, longitude: <#T##CLLocationDegrees#>)
+        }
+    }
+    var title: String? {
+        place
+    }
+  
+    var subtitle: String? {
+        "Magnitude: \(magnitude)"
     }
 }
